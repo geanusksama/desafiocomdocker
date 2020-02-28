@@ -7,9 +7,11 @@ const HOST = '0.0.0.0';
 
 const app = express ();
 
-//aqui é p start do servidor express que foi instalado, requirido e instaciado acima
+//aqui é para iniciar o servidor express que foi instalado, requirido e instaciado acima
 app.get('/:numero',(req,res)=>{
+    //verificando se o sinal é negativo
     if(req.params.numero[0]=='-'){
+        //montando o json com a palavra 'Menos'
         var monta = "Menos "+numeroPorExtenso(req.params.numero) 
         res.json({   
             extenso:monta   
@@ -34,8 +36,12 @@ function numeroPorExtenso(valor) {
     var posisao =1
     var nova = valor
     
+    
     //tratando o valor para submeter às funções visto
-    //o tamanho de cada estrutura que aumenta por causa do sinal
+    //o tamanho de cada estrutura que aumenta por causa do sinal negativo
+    // já que estou comparando com o tamanho na função e o limite esta até 5 casas
+    // caso a leitura do vetor valor venha com sinal egativo na frente, sua estrutura ser de seis digitos 
+    // então retonaria um Jason vazio, no caso de 4 casas mostraria o primeiro valor indefinido
     if(valor[0]=='-'){
         nova=valor.substring(1, 5)
      
