@@ -13,14 +13,15 @@ export function numeroPorExtenso(valor) {
     var aux = {1:""}
     var completo = {1:""}
     var posisao =1
-    var negativo =0
     var nova = valor
     
     //tratando o valor para submeter às funções visto
-    //o tamanho de cada estrutura que aumenta por causa do sinal
+    //o tamanho de cada estrutura que aumenta por causa do sinal negativo
+    // já que estou comparando com o tamanho na função e o limite esta até 5 casas
+    // caso a leitura do vetor valor venha com sinal egativo na frente, sua estrutura ser de seis digitos 
+    // então retonaria um Jason vazio, no caso de 4 casas mostraria o primeiro valor indefinido
     if(valor[0]=='-'){
         nova=valor.substring(1, 5)
-        negativo=1
     }
     // a lógica consiste em medir o tamanho do dicionário e
     // para escolher a função que vai separar em casas e mosntar as palavras por extenso

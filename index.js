@@ -1,11 +1,13 @@
 const express  = require('express')
 //import { numeroPorExtenso } from './convert';
+// estava dando problema quando levantava a Docker por esse import, então apenas comentei 
+// e trouxe a função para cá :/
 const PORT = 3000;
 const HOST = '0.0.0.0';
 
 const app = express ();
 
-
+//aqui é p start do servidor express que foi instalado, requirido e instaciado acima
 app.get('/:numero',(req,res)=>{
     if(req.params.numero[0]=='-'){
         var monta = "Menos "+numeroPorExtenso(req.params.numero) 
@@ -36,13 +38,13 @@ function numeroPorExtenso(valor) {
     //o tamanho de cada estrutura que aumenta por causa do sinal
     if(valor[0]=='-'){
         nova=valor.substring(1, 5)
-        negativo=1
+     
     }
-    // a lógica consiste em medir o tamanho do dicionário e
-    // para escolher a função que vai separar em casas e mosntar as palavras por extenso
+    // a lógica consiste em medir o tamanho da variável valor, com base nisso o case escolhe qual método vai usar
+    // feito isso acontece uma preparação da extrutura do extenso pegando cada valor com base nas casas decimais
     switch (nova.length) {
         case 1:    
-              //se for apenas um uni             
+              //se for apenas um unidade basta mostrar, não precisa de muita coisa
               return  iniciais[nova[0]]  
               break;
         case 2:
@@ -71,11 +73,15 @@ function numeroPorExtenso(valor) {
     return completo[posisao]
  }
  function preparaTres(nova){
+     //aqui por serem tres numeros, estou verificando se a segunda posição do vetor é,
+     //caso seja vou decidir por qual vetor fazer a montagem, pois se deixar a busca na casa de iniciais
+     // o valor 16 ficara {um e seis}, esse processo é verificado em todas as duas últimas casas do processo
     if (nova[1]==1){
         aux = dezenaDez[(nova[1]+nova[2])] 
         completo[posisao] = centena[nova[0]]+" e "
                             +aux
-    }else{
+    }else{                  //esse if são para esconder o zero e não deixar a saída com a msg undefined
+                            //isso é feito nas outras funções
         completo[posisao] = (centena[nova[0]]==0 ? + "" : centena[nova[0]])+ " "
                             +(dezena[nova[1]] == 0 ? "" :" e "+ dezena[nova[1]])
                             +(iniciais[nova[2]] == 0 ? "" : " e "+iniciais[nova[2]])
@@ -83,6 +89,7 @@ function numeroPorExtenso(valor) {
     return completo[posisao]
  }
  function preparaQuatro(nova){
+     //visto que o vetor vai aumentando, a busca pela posição da casa decimal muda
     if (valor[2]==1){
         aux = dezenaDez[(nova[2]+nova[3])] 
 
@@ -98,6 +105,7 @@ function numeroPorExtenso(valor) {
     return completo[posisao]
  }
  function preparaCinco(nova){
+     //troca de vetor de dezenas por dezenazDez
     if (valor[3]==1){
         aux = dezenaDez[(nova[3]+nova[4])] 
         completo[posisao] = (nova[1] == 0 ?dezena[nova[0]]+" mil e ":dezena[nova[0]]+ " e ")+
@@ -105,6 +113,9 @@ function numeroPorExtenso(valor) {
                             +(centena[nova[2]]==0?"":centena[nova[2]]+" e ")
                             +aux
     }else if (nova[0]==1){
+        //aqui é outro tratamento para escolher o vetor, pois nesse caso as duas
+        // primeiras casas variam, em escolher por exemplo 50 -> cinquenta, mas se começar com
+        //o valor 16, já se sabe que trata-se de dezesses mil e não 'um e seis', fazendo a troca de vetor
         aux = dezenaDez[(nova[0]+nova[1])] 
         completo[posisao] = aux +" mil "
                             +centena[nova[2]]+" "
